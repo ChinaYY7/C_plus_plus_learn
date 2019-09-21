@@ -9,7 +9,7 @@ struct c
 };
 
 #pragma pack(push)
-#pragma pack(1)
+#pragma pack(4)
 struct b
 {
     double d;
