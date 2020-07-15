@@ -5,30 +5,40 @@
 #include<algorithm>
 #include<exception>
 
+/*
+快速排序
+最优的情况是在选择比对的值位于整个数组有序中间的数值
+最差的情况是选择比对的值位于整个数组有序后最大的数值
+*/
 template<typename T>
 class sort
 {
     private:
+        static long count;
         int quick_sort_one(T data[], int len, int start, int end);
         void quick_sort(T data[], int len, int start, int end);
     
     public:
         void quick_sort(T data[], int len);
+        long get_count(){return count;}
 };
 
-template<typename T>
+template <typename T>
+long sort<T>::count = 0; 
+
+template <typename T>
 int sort<T>::quick_sort_one(T data[], int len, int start, int end)
 {
     if(data == nullptr || len <= 0 || start > end || start < 0 || end >= len)
     {
-        std::logic_error ex("Invalid Parameters.");
-        throw new std::exception(ex);
+        throw new std::logic_error("Invalid Parameters.");
     }
 
     int small = start - 1;
     int index;
     for(index = start; index < end; index++)
     {
+        count++;
         if(data[index] < data[end])
         {
             small++;
@@ -58,6 +68,7 @@ void sort<T>::quick_sort(T data[], int len, int start, int end)
 template<typename T>
 void sort<T>::quick_sort(T data[], int len)
 {
+    count = 0;
     quick_sort(data, len, 0, len -1);
 }
 
