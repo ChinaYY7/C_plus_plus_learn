@@ -8,8 +8,10 @@ class WR_lock
     private:
         pthread_mutex_t wmutex;
         pthread_mutex_t rmutex;
+        pthread_mutex_t count_mutex;
         pthread_cond_t wcond;
         pthread_cond_t rcond;
+
         int wcount;
         int rcount;
     
@@ -18,6 +20,7 @@ class WR_lock
         {
             pthread_mutex_init(&wmutex, NULL);
             pthread_mutex_init(&rmutex, NULL);
+            pthread_mutex_init(&count_mutex, NULL);
             pthread_cond_init(&wcond, NULL);
             pthread_cond_init(&rcond, NULL);
             wcount = 0;
@@ -35,7 +38,9 @@ class WR_lock
 
             pthread_mutex_lock(&rmutex);
             rcount--;
+            pthread_mutex_lock(&count_mutex);
             std::cout << "read:" << rcount  << std::endl;
+            pthread_mutex_unlock(&count_mutex);
             pthread_mutex_unlock(&rmutex);
 
             if(rcount == 0)
@@ -53,7 +58,9 @@ class WR_lock
             wcount = 1;
             //std::cout <<"write:" <<wcount <<std::endl;
             wcount = 0;
+            pthread_mutex_lock(&count_mutex);
             std::cout << "write:" << wcount <<std::endl;
+            pthread_mutex_unlock(&count_mutex);
             pthread_cond_signal(&rcond);
             pthread_mutex_unlock(&wmutex);
 
@@ -63,7 +70,7 @@ class WR_lock
 
 WR_lock wr_lock;
 
-const static int count = 2;
+const static int count = 5;
 
 void *read_thread(void *p)
 {
