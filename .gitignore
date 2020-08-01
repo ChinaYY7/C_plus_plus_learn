@@ -62,6 +62,7 @@
 
 *.app
 
+*.bin
 # Vscode
 
 *.json
