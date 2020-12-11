@@ -66,3 +66,9 @@
 # Vscode
 
 *.json
+
+build/
+
+.vscode/
+
+movie/
